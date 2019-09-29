@@ -109,6 +109,10 @@ The batch type and supporting command are useful for allowing an "infinite scrol
 
 Upon joining a channel, a client may request the latest messages for the buffer so that the active conversation context may be retrieved.
 
+## Implementation Considerations
+
+In the typical IRC network, there is no well-defined global linear ordering of messages, since different linked servers may see messages in different orders. Furthermore, due to clock skew between servers and between server and client, messages may be delivered in an order that differs from the timestamp order. Clients should take this into account when requesting and displaying history.
+
 ## Security Considerations
 Secure identification of users and clients MUST exist in order to ensure that users cannot obtain history they are not authorised to view. Use of account names, internal account identifiers, or certificate fingerprints SHOULD be strongly considered when matching content to users. If a client requests content for a target that they do not have permission for, eg. a channel they are banned from, an empty batch SHOULD be returned as if no content exists.
 
