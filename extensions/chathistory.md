@@ -23,7 +23,7 @@ The `chathistory` extension uses the [chathistory][batch/chathistory] batch type
 To fully support this extension, clients MUST support the [`batch`][batch], [`server-time`][server-time] and [`message-tags`][message-tags] capabilities.
 
 The `chathistory` capability MUST be negotiated. This allows the server and client to act differently when delivering message history on connection.
- 
+
 An ISUPPORT token MUST be sent to the client to state the maximum number of messages a client can request in a single command, represented by an integer. `CHATHISTORY=50`. If `0`, the client SHOULD assume that there is no maximum number of messages.
 
 ### `CHATHISTORY` Command
@@ -44,7 +44,7 @@ The following subcommands are used to describe how the server should return mess
 #### `BEFORE`
 
     CHATHISTORY BEFORE <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-    
+
 Request up to `limit` number of messages before and including the given `timestamp` or `msgid`. Only one timestamp or msgid MUST be given, not both.
 
 #### `AFTER`
