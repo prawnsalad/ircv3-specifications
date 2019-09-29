@@ -41,27 +41,27 @@ If a nickname is given as the `target` then the server SHOULD include history se
 
 #### Subcommands
 
-The following subcommands are used to describe how the server should return messages relative to the `timestamp` or `msgid` given.
+The following subcommands are used to describe how the server should return messages relative to the `timestamp` or `msgid` given. In all cases, at most one timestamp or msgid MUST be given, never both. The number of messages returned must be equal to or less than `limit`.
 
 #### `BEFORE`
 
     CHATHISTORY BEFORE <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
 
-Request up to `limit` number of messages before and including the given `timestamp` or `msgid`. Only one timestamp or msgid MUST be given, not both.
+Request messages before and including the given `timestamp` or `msgid`.
 
 #### `AFTER`
     CHATHISTORY AFTER <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-Request up to `limit` number of messages after and excluding the given `timestamp` or `msgid`. Only one timestamp or msgid MUST be given, not both.
+Request number of messages after and including the given `timestamp` or `msgid`.
 
 #### `LATEST`
     CHATHISTORY LATEST <target> <* | timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-Request the most recent messages that have been sent after and excluding the given `timestamp` or `msgid`. If a `*` is given instead of a timestamp or msgid, the server MUST use the current time as a timestamp. The number of messages returned MUST be equal to or less than `limit`. If a `*` is not given, only one timestamp or msgid MUST be given, not both.
+Request the most recent messages that have been sent. If a `timestamp` or `msgid` is given, restrict to messages sent after and including that time or message; if a `*` is given, no such restriction applies.
 
 This is useful for retrieving the latest conversation when first joining a channel or opening a query buffer.
 
 #### `AROUND`
     CHATHISTORY AROUND <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-Request a number of messages before and after the `timestamp` or `msgid` with the total number of returned messages not exceeding `limit`. The implementation may decide how many messages to include before and after the selected message. Only one timestamp or msgid MUST be given, not both.
+Request a number of messages before, including, and after the `timestamp` or `msgid`. The implementation may decide how many messages to include before and after (up to a total of `limit`).
 
 This is useful for retrieving conversation context around a single message.
 
