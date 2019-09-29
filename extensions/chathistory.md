@@ -26,6 +26,8 @@ The `chathistory` capability MUST be negotiated. This allows the server and clie
 
 An ISUPPORT token MUST be sent to the client to state the maximum number of messages a client can request in a single command, represented by an integer. `CHATHISTORY=50`. If `0`, the client SHOULD assume that there is no maximum number of messages.
 
+The `event-playback` capability MAY be negotiated. This allows the client to signal that it is capable of receiving and correctly processing lines that would normally produce a local state change (such as `JOIN` or `MODE`) in its history batches.
+
 ### `CHATHISTORY` Command
 `CHATHISTORY` content can be requested by the client by sending the `CHATHISTORY` command to the server. A `batch` MUST be returned by the server. If no content exists to return, an empty batch SHOULD be returned to avoid the client waiting for a reply and to indicate that no content is available.
 
@@ -69,6 +71,8 @@ Request up to `limit` number of messages between the given `timestamp` or `msgid
 
 #### Returned message notes
 The returned messages MUST be in ascending time order and the `server-time` tag SHOULD be the time at which the message was received by the IRC server. The `msgid` tag that identifies each individual message in a response MUST be the `msgid` tag as originally sent by the IRC server.
+
+If the client has not negotiated the `event-playback` capability, the server MUST NOT send any lines other than `PRIVMSG` and `NOTICE` in the reply batch. If the client has negotiated `event-playback`, the server SHOULD send additional lines relevant to the chat history, including but not limited to `TAGMSG`, `JOIN`, `PART`, `QUIT`, `MODE`, `TOPIC`, and `NICK`.
 
 #### Errors and Warnings
 Errors are returned using the standard replies syntax.
