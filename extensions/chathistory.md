@@ -44,17 +44,15 @@ If a nickname is given as the `target` then the server SHOULD include history se
 The following subcommands are used to describe how the server should return messages relative to the `timestamp` or `msgid` given. In all cases, at most one timestamp or msgid MUST be given, never both. The number of messages returned must be equal to or less than `limit`.
 
 #### `BEFORE`
-
-    CHATHISTORY BEFORE <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-
-Request messages before and including the given `timestamp` or `msgid`.
+    CHATHISTORY BEFORE <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ> <limit>
+Request messages before and including the given `timestamp`.
 
 #### `AFTER`
-    CHATHISTORY AFTER <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-Request number of messages after and including the given `timestamp` or `msgid`.
+    CHATHISTORY AFTER <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ> <limit>
+Request number of messages after and including the given `timestamp`.
 
 #### `LATEST`
-    CHATHISTORY LATEST <target> <* | timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
+    CHATHISTORY LATEST <target> <* | timestamp=YYYY-MM-DDThh:mm:ss.sssZ> <limit>
 Request the most recent messages that have been sent. If a `timestamp` or `msgid` is given, restrict to messages sent after and including that time or message; if a `*` is given, no such restriction applies.
 
 This is useful for retrieving the latest conversation when first joining a channel or opening a query buffer.
@@ -66,8 +64,8 @@ Request a number of messages before, including, and after the `timestamp` or `ms
 This is useful for retrieving conversation context around a single message.
 
 #### `BETWEEN`
-    CHATHISTORY BETWEEN <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
-Request up to `limit` number of messages between the given `timestamp` or `msgid` values. The returned messages MUST start from the inclusive first message selector, while excluding and finishing on the second - this may be forwards or backwards in time.
+    CHATHISTORY BETWEEN <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ> <limit>
+Request up to `limit` number of messages between the given `timestamp` or `msgid` values. The returned messages MUST start from the inclusive first message selector, while including and finishing on the second - this may be forwards or backwards in time.
 
 #### Returned message notes
 The returned messages MUST be in ascending time order and the `server-time` tag SHOULD be the time at which the message was received by the IRC server. The `msgid` tag that identifies each individual message in a response MUST be the `msgid` tag as originally sent by the IRC server.
