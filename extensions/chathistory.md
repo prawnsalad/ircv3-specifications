@@ -65,6 +65,10 @@ Request a number of messages before, including, and after the `timestamp` or `ms
 
 This is useful for retrieving conversation context around a single message.
 
+#### `BETWEEN`
+    CHATHISTORY BETWEEN <target> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <timestamp=YYYY-MM-DDThh:mm:ss.sssZ | msgid=1234> <limit>
+Request up to `limit` number of messages between the given `timestamp` or `msgid` values. The returned messages MUST start from the inclusive first message selector, while excluding and finishing on the second - this may be forwards or backwards in time.
+
 #### Returned message notes
 The returned messages MUST be in ascending time order and the `server-time` tag SHOULD be the time at which the message was received by the IRC server. The `msgid` tag that identifies each individual message in a response MUST be the `msgid` tag as originally sent by the IRC server.
 
