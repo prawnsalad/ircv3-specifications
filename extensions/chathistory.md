@@ -111,6 +111,38 @@ The batch type and supporting command are useful for allowing an "infinite scrol
 
 Upon joining a channel, a client may request the latest messages for the buffer so that the active conversation context may be retrieved.
 
+### Client pseudocode
+
+A client with full support for BATCH, message IDs, and deduplication can fill in gaps in its history using the following pseudocode. `FUZZ_INTERVAL` is a constant that compensates for clock skew across the IRC network (perhaps 1 to 10 seconds):
+
+    lower_bound = <timestamp of last message relayed to the previous session>
+    lower_bound -= FUZZ_INTERVAL
+    upper_bound = now() + FUZZ_INTERVAL
+    retrieved_count = 0
+    while retrieved_count < SANITY_LIMIT and lower_bound < upper_bound:
+        messages = CHATHISTORY(BETWEEN, upper_bound, lower_bound)
+        messages = deduplicate(messages)
+        if len(messages) == 0:
+            break
+        display(messages)
+        upper_bound = min(msg.timestamp for msg in messages)
+        retrieved_count += len(messages)
+
+A client without support for BATCH, message IDs, or deduplication can still make use of CHATHISTORY, albeit with the possibility of skipping some messages or seeing some duplicated messages. For example, on initial JOIN, the client can do the following (this implementation errs on the side of missing messages, rather than seeing duplicated messages):
+
+    lower_bound = <timestamp of last message relayed to the previous session>
+    lower_bound += ONE_MILLISECOND
+    display(CHATHISTORY(LATEST, lower_bound))
+
+Infinite scroll can be implemented as:
+
+    lower_bound = <timestamp of last message relayed to the previous session>
+    lower_bound += ONE_MILLISECOND
+    upper_bound = <lowest timestamp of any message retrieved during current session>
+    upper_bound -= ONE_MILLISECOND
+    if lower_bound < upper_bound:
+        display(CHATHISTORY(BETWEEN, upper_bound, lower_bound))
+
 ## Implementation Considerations
 
 In the typical IRC network, there is no well-defined global linear ordering of messages, since different linked servers may see messages in different orders. Furthermore, due to clock skew between servers and between server and client, messages may be delivered in an order that differs from the timestamp order. Clients should take this into account when requesting and displaying history.
